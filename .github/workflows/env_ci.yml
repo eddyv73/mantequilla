@@ -1,0 +1,45 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build_dev:
+    runs-on: ubuntu-latest
+    environment: 'dev'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Antes
+        run: |
+          echo 'Original >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+          cat connections.json
+          echo 'REPLACE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      - name: replace
+        run: |
+          sed -i 's/__CONNECTION_STRING__/${{secrets.supersecreto}}/g' connections.json
+      - name: Run a one-line script
+        run: |
+          echo 'Final >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+          cat connections.json
+  build_qa:
+    runs-on: ubuntu-latest
+    needs: 'build_dev'
+    environment: 'qa'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Antes
+        run: |
+          echo 'Original >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+          cat connections.json
+          echo 'REPLACE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+      - name: replace
+        run: |
+          sed -i 's/__CONNECTION_STRING__/${{secrets.supersecreto}}/g' connections.json
+      - name: Run a one-line script
+        run: |
+          echo 'Final >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+          cat connections.json
