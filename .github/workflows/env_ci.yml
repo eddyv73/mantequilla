@@ -1,4 +1,4 @@
-name: CI
+name: CI ENV
 on:
   push:
     branches: [ "main" ]
